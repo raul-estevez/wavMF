@@ -1,6 +1,5 @@
 ! The current implementation is compatible only with 2 channel, 16 bit audio. It can be modified to work with other
 ! configurations. 
- 
 
 module readwav
     implicit none
@@ -129,6 +128,11 @@ contains
 
     end function
 
+    ! Mimic of the MATLAB audioread() function. Returns the samples as normalized reals
+    ! Inputs:
+    !   - fileunti -> the unit number of the wav file
+    ! Output:
+    !   - Samples -> samples as normalized reals
 
     function audioread(fileunit) result (samples)
         integer, intent(in) :: fileunit

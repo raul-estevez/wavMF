@@ -1,4 +1,4 @@
-program sonido
+program main 
     use readwav
 
     implicit none
@@ -21,7 +21,7 @@ program sonido
     print *, "fs=",fs
     print *, "nch=",nch
     print *, "bps=", bits
-    print "(F10.7)", samples(size(samples,1)-100:size(samples,1),1)
+    print "(F10.7)", samples(1:10,1) ! The first 10 samples from the right channel
 
     close(wavunit)
 end program 

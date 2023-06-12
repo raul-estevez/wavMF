@@ -1,5 +1,5 @@
 program demo 
-    use readwav
+    use fortranwav 
 
     implicit none
 

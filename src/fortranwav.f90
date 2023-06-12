@@ -83,6 +83,18 @@ contains
         bits = transfer(bchar, bits)
     end function
 
+    function getdatasize(fileunit) result(sz)
+        integer, intent(in) :: fileunit
+        integer(kind=4) :: sz
+        character(4) :: szchar
+
+        szchar = readnbytes(fileunit, 4, 41)
+        sz = transfer(szchar, sz)
+        ! We divide by 4 the total bytes because we have 2 channels (with half the samples each) and 2 bytes per sample, so we
+        ! will have a total of datasize/4 integers
+        sz = sz/4 
+    end function
+
     ! Reads the samples in the file
     ! Inputs:
     !   - fileunti -> the unit number of the wav file
@@ -97,31 +109,26 @@ contains
         character(:), allocatable :: datachar
 
         ! Variables for the data chunk size
-        character(4) :: dschar
-        integer(kind=4) :: datasize
+        integer(kind=4) :: dsz
 
         ! Function variables
         integer :: i
         integer(kind=2) :: moldint  ! not pretty?
         
         ! Get size of the data section (in bytes)
-        dschar = readnbytes(fileunit, 4, 41)
-        datasize = transfer(dschar, datasize)
+        dsz = getdatasize(fileunit)
 
-        ! Allocate memory for char data
-        !allocate(character(datasize) :: datachar)
-    
         ! Read samples
-        datachar = readnbytes(fileunit, datasize, 45)
+        datachar = readnbytes(fileunit, dsz*4, 45)
         
         ! Allocate array for Right/Left samples
         ! We divide by 4 the total bytes because we have 2 channels (with half the samples each) and 2 bytes per sample, so we
         ! will have a total of datasize/4 integers
-        allocate(samples(datasize/4, 2))
+        allocate(samples(dsz, 2))
 
         ! The i right channel sample corresponds with the 1 and 2, 5 and 6, 9 and 10... 4i-3 and 4i-2 bytes
         ! IDEM with the left channel but with the indexes 4i-1 and 4i
-        do i=1,datasize/4
+        do i=1,dsz
             samples(i,1) = transfer(datachar(4*i-3:4*i-2), moldint)
             samples(i,2) = transfer(datachar(4*i-1:4*i), moldint)
         end do 
@@ -133,7 +140,6 @@ contains
     !   - fileunti -> the unit number of the wav file
     ! Output:
     !   - Samples -> samples as normalized reals
-
     function audioread(fileunit) result (samples)
         integer, intent(in) :: fileunit
         real,allocatable :: samples(:,:)

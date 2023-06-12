@@ -1,25 +1,38 @@
-! TODO: Comentar más el código y hacer la repo de github
+! The current implementation is compatible only with 2 channel, 16 bit audio. It can be modified to work with other
+! configurations. 
+ 
 
 module readwav
     implicit none
-    private
 
-    public :: openwav, getfs, getnchannels, getbitspersample, readwavdata, audioread
     private :: readnbytes
+    public :: openwav, getfs, getnchannels, getbitspersample, readwavdata, audioread
     
 contains
-        
+    
+    ! Reads n bytes from the file
+    ! Input:
+    !   - fileunit -> the unit number of the wav file
+    !   - nbytes -> the number of bytes to read
+    !   - startpos -> stating possition in the file
+    ! Output:
+    !   - bytes -> The read bytes
     function readnbytes(fileunit, nbytes, startpos) result(bytes)
         integer,intent(in) :: fileunit, nbytes, startpos
         character(nbytes) :: bytes
          
-        integer :: i, io
+        integer :: i
 
         do i=1,nbytes
-            read(unit=fileunit, rec=startpos+i-1, iostat=io ) bytes(i:i)
+            read(unit=fileunit, rec=startpos+i-1) bytes(i:i)
         end do 
     end function 
 
+    ! Opens the wav file
+    ! Inputs:
+    !   - filename -> The path to the wav file
+    ! Output:
+    !   - fileunit -> The unit number of the opened file
     function openwav(filename) result(fileunit)
         character(*),intent(in) :: filename
         integer :: fileunit
@@ -27,6 +40,11 @@ contains
         open(newunit=fileunit, file=filename, form='unformatted', access='direct', status='old',action='read', recl=1)
     end function
 
+    ! Read the number of channels in the file
+    ! Inputs:
+    !   - fileunit -> the unit number of the wav file
+    ! Output:
+    !   - nch -> number of channels
     function getnchannels(fileunit) result(nch)
         integer, intent(in) :: fileunit
         character(2) :: channels
@@ -35,7 +53,12 @@ contains
         channels = readnbytes(fileunit, 2, 23)
         nch = transfer(channels, nch)
     end function
-
+    
+    ! Read the sampling frequency
+    ! Inputs:
+    !   - fileunti -> the unit number of the wav file
+    ! Output:
+    !   - fs -> samplnig frequency
     function getfs(fileunit) result(fs)
         integer, intent(in) :: fileunit
         integer(kind=4) :: fs
@@ -46,6 +69,11 @@ contains
         fs = transfer(fschar, fs)
     end function
 
+    ! Reads the bits per sample
+    ! Inputs:
+    !   - fileunti -> the unit number of the wav file
+    ! Output:
+    !   - bits -> bits per sample
     function getbitspersample(fileunit) result(bits)
         integer, intent(in) :: fileunit
         integer(kind=2) :: bits
@@ -56,6 +84,11 @@ contains
         bits = transfer(bchar, bits)
     end function
 
+    ! Reads the samples in the file
+    ! Inputs:
+    !   - fileunti -> the unit number of the wav file
+    ! Output:
+    !   - samples -> the samples, as 2 byte integers
     function readwavdata(fileunit) result (samples) 
         ! Function input/output
         integer, intent(in) :: fileunit
@@ -70,14 +103,14 @@ contains
 
         ! Function variables
         integer :: i
-        integer(kind=2) :: moldint
+        integer(kind=2) :: moldint  ! not pretty?
         
         ! Get size of the data section (in bytes)
         dschar = readnbytes(fileunit, 4, 41)
         datasize = transfer(dschar, datasize)
 
         ! Allocate memory for char data
-        allocate(character(datasize) :: datachar)
+        !allocate(character(datasize) :: datachar)
     
         ! Read samples
         datachar = readnbytes(fileunit, datasize, 45)

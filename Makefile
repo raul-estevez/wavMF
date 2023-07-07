@@ -1,4 +1,8 @@
 .SUFFIXES:
+
+LOUT = /usr/local/lib/
+MOUT = /usr/local/include/
+
 FC = gfortran
 FCFLAGS = -Wall
 
@@ -16,6 +20,14 @@ $(OBJ): $(SRC)
 	mkdir -p obj/ mod/
 	$(FC) $(FCFLAGS) -c -o $@ -J $(MDIR) $+
 
+install: $(OBJ)
+	ar -r libwavmf.a $(OBJ)
+	cp libwavmf.a $(LOUT)
+	cp mod/* $(MOUT)
+	
+uninstall:
+	rm -f $(LOUT)libwavmf.a
+	rm -f $(MOUT)wavmf.mod
 .PHONY: clean
 clean:
-	sudo rm -r obj/ mod/
+	rm -rf obj/ mod/ libwavmf.a

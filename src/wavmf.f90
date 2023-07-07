@@ -1,7 +1,7 @@
 ! The current implementation is compatible only with 2 channel, 16 bit audio. It can be modified to work with other
 ! configurations. 
 
-module fortranwav 
+module wavmf 
     implicit none
 
     private :: readnbytes

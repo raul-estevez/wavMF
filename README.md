@@ -12,20 +12,20 @@
 Basic Fortran module for reading .WAV file samples and metadata.
 
 ## Install
-    If you want the defaults (library installed in /usr/local/lib/ and mod file in /usr/local/include/) just:  
+If you want the defaults (library installed in /usr/local/lib/ and mod file in /usr/local/include/) just:  
 ```bash
-    git clone https://github.com/SarKing/wavMF
-    cd wavmf
-    make
-    sudo make install
+# git clone https://github.com/SarKing/wavMF
+# cd wavmf
+# make
+# sudo make install
 ``` 
-    You can change the installation folder by editing the firsts lines of the Makefile  
+You can change the installation folder by editing the firsts lines of the Makefile  
 #### Uninstall
-    If you installed with the defaults just:  
-    ```bash
-       sudo make uninstall 
-    ```
-    Change the Makefile accordingly with your installation path.  
+If you installed with the defaults just:  
+```bash
+# sudo make uninstall 
+```
+Change the Makefile accordingly with your installation path.  
 
 ## Usage
 #### Disclaimer
@@ -37,12 +37,12 @@ If you installed the library (using the Makefile) you can compile your code indi
 gfortran)  
 
 ```bash
-    gfortran -c foo.f90 -I /usr/loca/include/
+# gfortran -c foo.f90 -I /usr/loca/include/
 ```
 And the link indicanting the lib path  
 
 ```bash
-    gfortran foo.o -L /usr/local/lib -lwavmf
+# gfortran foo.o -L /usr/local/lib -lwavmf
 ```
 
 Note tha you can also skip the installation and use the .mod and .o files located in the mod/ and /obj folder after compilation

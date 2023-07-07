@@ -55,7 +55,7 @@ contains
     
     ! Read the sampling frequency
     ! Inputs:
-    !   - fileunti -> the unit number of the wav file
+    !   - fileunit -> the unit number of the wav file
     ! Output:
     !   - fs -> samplnig frequency
     function getfs(fileunit) result(fs)
@@ -70,7 +70,7 @@ contains
 
     ! Reads the bits per sample
     ! Inputs:
-    !   - fileunti -> the unit number of the wav file
+    !   - fileunit -> the unit number of the wav file
     ! Output:
     !   - bits -> bits per sample
     function getbitspersample(fileunit) result(bits)
@@ -83,6 +83,11 @@ contains
         bits = transfer(bchar, bits)
     end function
 
+    ! Calculates de number of samples in each channel
+    ! Inputs:
+    !   - fileunit -> the unit number of the wav file
+    ! Output:
+    !   - sz-> number of samples (in each channel)
     function getdatasize(fileunit) result(sz)
         integer, intent(in) :: fileunit
         integer(kind=4) :: sz
@@ -97,7 +102,7 @@ contains
 
     ! Reads the samples in the file
     ! Inputs:
-    !   - fileunti -> the unit number of the wav file
+    !   - fileunit -> the unit number of the wav file
     ! Output:
     !   - samples -> the samples, as 2 byte integers
     function readwavdata(fileunit) result (samples) 
@@ -137,7 +142,7 @@ contains
 
     ! Mimic of the MATLAB audioread() function. Returns the samples as normalized reals
     ! Inputs:
-    !   - fileunti -> the unit number of the wav file
+    !   - fileunit -> the unit number of the wav file
     ! Output:
     !   - Samples -> samples as normalized reals
     function audioread(fileunit) result (samples)

@@ -37,9 +37,9 @@ If you installed the library (using the Makefile) you can compile your code indi
 gfortran)  
 
 ```bash
-$ gfortran -c foo.f90 -I /usr/loca/include/
+$ gfortran -c foo.f90 -I /usr/local/include/
 ```
-And the link indicanting the lib path  
+And then link indicanting the lib path  
 
 ```bash
 $ gfortran foo.o -L /usr/local/lib -lwavmf

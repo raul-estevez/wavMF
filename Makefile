@@ -4,7 +4,7 @@ LOUT = /usr/local/lib/
 MOUT = /usr/local/include/
 
 FC = gfortran
-FCFLAGS = -Wall
+FCFLAGS = -Wall -Ofast
 
 SDIR = src
 _SRC = wavmf.f90

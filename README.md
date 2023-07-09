@@ -6,6 +6,7 @@
 - [Usage](#usage)  
     - [Disclaimer](#disclaimer)  
     - [Library](#library)
+    - [Module](#module)
 - [Author](#author)  
 - [License](#license)  
 
@@ -47,6 +48,20 @@ $ gfortran foo.o -L /usr/local/lib -lwavmf
 
 Note tha you can also skip the installation and use the .mod and .o files located in the mod/ and /obj folder after compilation
 with the Makedile.  
+
+#### Module
+All the functions in the library are documented in the source code, here is just an overview:
+
+```
+openwav(filename) -> Open the wav file.
+getnchannels(fileunit) -> Reads the number of channels.
+getfs(fileunit) -> Reads the sampling frequency.
+getbitspersample(fileunit) -> Reads the bits per sample of the recording.
+getdatasize(fileunit) -> Calculates the number of samples that each channels has.
+readwavdata(fileunit) -> Reads the samples as they are in the file.
+audioread(fileunit) -> IDEM as readwavdata but returns the samples as normalized reals.
+```
+
 ## Author
 Raul Estevez Gomez. Contact email: estevezgomezraul@gmail.com  
 Please feel free to contact me if you have any type of correction or question. 

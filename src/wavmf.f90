@@ -2,6 +2,7 @@
 ! configurations. 
 
 module wavmf 
+    use, intrinsic :: iso_fortran_env
     implicit none
 
     private :: readnbytes
@@ -47,7 +48,7 @@ contains
     function getnchannels(fileunit) result(nch)
         integer, intent(in) :: fileunit
         character(2) :: channels
-        integer(kind=2) :: nch
+        integer(INT16) :: nch
 
         channels = readnbytes(fileunit, 2, 23)
         nch = transfer(channels, nch)
@@ -60,7 +61,7 @@ contains
     !   - fs -> samplnig frequency
     function getfs(fileunit) result(fs)
         integer, intent(in) :: fileunit
-        integer(kind=4) :: fs
+        integer(INT32) :: fs
         character(4) :: fschar 
         
         ! All is big endian
@@ -75,7 +76,7 @@ contains
     !   - bits -> bits per sample
     function getbitspersample(fileunit) result(bits)
         integer, intent(in) :: fileunit
-        integer(kind=2) :: bits
+        integer(INT16) :: bits
 
         character(2) :: bchar
 
@@ -90,7 +91,7 @@ contains
     !   - sz-> number of samples (in each channel)
     function getdatasize(fileunit) result(sz)
         integer, intent(in) :: fileunit
-        integer(kind=4) :: sz
+        integer(INT32) :: sz
         character(4) :: szchar
 
         szchar = readnbytes(fileunit, 4, 41)
@@ -108,17 +109,17 @@ contains
     function readwavdata(fileunit) result (samples) 
         ! Function input/output
         integer, intent(in) :: fileunit
-        integer(kind=2),allocatable :: samples(:,:) ! Currently only supports 16bit samples
+        integer(INT16),allocatable :: samples(:,:) ! Currently only supports 16bit samples
 
         ! Character variable for data samples
         character(:), allocatable :: datachar
 
         ! Variables for the data chunk size
-        integer(kind=4) :: dsz
+        integer(INT32) :: dsz
 
         ! Function variables
         integer :: i
-        integer(kind=2) :: moldint  ! not pretty?
+        integer(INT16) :: moldint  ! not pretty?
         
         ! Get size of the data section (in bytes)
         dsz = getdatasize(fileunit)
@@ -148,7 +149,7 @@ contains
     function audioread(fileunit) result (samples)
         integer, intent(in) :: fileunit
         real,allocatable :: samples(:,:)
-        integer(kind=2) :: intmold
+        integer(INT16) :: intmold
     
         samples = readwavdata(fileunit)
         samples = samples/real(huge(intmold))
